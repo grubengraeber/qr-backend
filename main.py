@@ -18,10 +18,11 @@ def read_root():
 def read_item(qr_code_type: QRCodeType):
     qr_code_type_validator = QRCodeTypeValidator()
     if not qr_code_type_validator.validate(qr_code_type):
-        export_types = [export_type.value for export_type in ExportType]
-        return Response(status_code=400, content=f"Invalid data type. "
-                                                 f"Supported types are {str.join(", ", export_types)}. "
-                                                 f"Text must not be empty.")
+        export_types = str.join(", ", [export_type.value for export_type in ExportType])
+        message = f"Invalid data type. Supported types are {export_types}. Text must not be empty."
+        return Response(
+            status_code=400, content=message
+        )
     file_type: str = qr_code_type.file_type
 
     qr_code_generator = QRCodeGenerator()
@@ -31,7 +32,6 @@ def read_item(qr_code_type: QRCodeType):
 
     return StreamingResponse(
         content=qr_code_bytes,
-        # media_type="binary/octet-stream",
         media_type=media_type
     )
 
@@ -48,7 +48,7 @@ def read_item(text: str, file: UploadFile):
     qr_code_bytes: BytesIO = qr_code_generator.generate_qr_code_with_centered_image(
         qr_code_type.text_to_encode,
         qr_code_type.file_type,
-        file.file
+        file
     )
 
     return StreamingResponse(
