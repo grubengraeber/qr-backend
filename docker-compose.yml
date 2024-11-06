@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+
+  qr-api:
+    container_name: fprint-api-v2
+    image: "fprint-api:v0.0.1"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8000:8000"
+
+    build:
+      dockerfile: Dockerfile
