@@ -1,10 +1,7 @@
 from io import BytesIO
-from typing import BinaryIO
-
 import segno
-from PIL import ImageFile
+from fastapi import UploadFile
 from segno import helpers
-
 from models.contact_type import ContactType
 from models.email_type import EmailType
 from models.wifi_type import WifiType
@@ -70,7 +67,7 @@ class QRCodeGenerator:
         out.seek(0)
         return out
 
-    def generate_qr_code_with_centered_image(self, data: str, file_type: str, image: BinaryIO) -> BytesIO:
+    def generate_qr_code_with_centered_image(self, data: str, file_type: str, image: UploadFile) -> BytesIO:
         customizer = QRCustomizationService()
         out = BytesIO()
         segno.make(data, error="h").save(out, scale=5, kind=file_type)
