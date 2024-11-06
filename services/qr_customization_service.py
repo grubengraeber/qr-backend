@@ -1,11 +1,7 @@
 from io import BytesIO
-from typing import BinaryIO
-
-import segno
-from PIL import Image, ImageFile
+from PIL import Image
+from fastapi import UploadFile
 from segno import QRCode
-
-from models.export_type import ExportType
 from services.png_converter_service import PNGConverterService
 
 
@@ -14,7 +10,7 @@ class QRCustomizationService:
         qr_code_with_image = qr_code.overlay(image_path)
         return qr_code_with_image
 
-    def customize_with_centered_image(self, out: BytesIO, file_type: str, center_image_binary: BinaryIO) -> BytesIO:
+    def customize_with_centered_image(self, out: BytesIO, file_type: str, center_image_binary: UploadFile) -> BytesIO:
         result_out = BytesIO()
         png_converter = PNGConverterService()
         out.seek(0)  # Important to let Pillow load the PNG
