@@ -1,0 +1,14 @@
+segno~=1.6.1
+fastapi[standard]~=0.115.4
+pydantic~=2.9.2
+Pillow
+python-multipart
+wand
+
+
+
+
+
+
+
+
