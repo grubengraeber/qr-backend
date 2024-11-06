@@ -1,20 +1,15 @@
-from io import BytesIO
-from typing import BinaryIO
+import cairosvg
 from PIL import Image
-
-from services.svg_converter_service import SVGConverterService
+from fastapi import UploadFile
 
 
 class PNGConverterService:
-    def convert(self, image: BinaryIO) -> Image:
-        if image.name.endswith('.svg'):
-            return self.convert_from_svg(image)
-        result = Image.open(image)
-        return result
+    def convert(self, image: UploadFile) -> Image:
+        # check if is svg
+        print(image.filename.endswith('.svg'))
 
-    def convert_from_svg(self, svg: BinaryIO) -> Image:
-        # Convert SVG to PNG
-        svg_converter = SVGConverterService()
-        png = svg_converter.convert_svg_to_png(svg.read().decode("utf-8")).getvalue()
-        result = Image.open(BytesIO(png))
+        if image.filename.endswith('.svg'):
+            converted_png_file = cairosvg.svg2png(file_obj=image)
+            return Image.open(converted_png_file)
+        result = Image.open(image.file)
         return result
