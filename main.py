@@ -42,6 +42,9 @@ def read_item(text: str, file: UploadFile):
     if not text:
         return Response(status_code=400, content="Text must not be empty.")
 
+    if not file.content_type == 'image/png':
+        return Response(status_code=400, content="File must be a PNG image file.")
+
     qr_code_type = QRCodeType(text_to_encode=text, file_type=ExportType.PNG.value)
 
     qr_code_generator = QRCodeGenerator()
